@@ -1,43 +1,31 @@
-zmqTransport
+Koa-JRPC2
 =====
 
-ZeroMQ transport for JRPC2
+Koa middleware for JRPC2
 
 INSTALL
 ======
 ```
-npm install zmq-transport
+npm install koa-jrpc2
 ```
 
 
 USING
 =====
 
-Server
+Using with Koa as middleware:
 
 ```javascript
-  var rpc = require('jrpc2');
-  var zmqTransport = require('zmq-transport');
 
-  var server = new rpc.server;  
+var rpc = require('jrpc2');
+var koaMiddleware = require('koa-jrpc2');
+var _ = require('koa-route');
+var app = require('koa')();
+var rpcServer = new rpc.server();
 
-  server.loadModules(__dirname + '/modules/', function () {
-    var zmq = new zmqTransport({url: 'tcp://127.0.0.1:5555'});
-    zmq.listen(server);
-  });
-```
+rpcServer.loadModules(__dirname + '/modules/', function () {
+    app.use(_.post('/api', koaMiddleware(rpcServer)));
+    app.listen(80);
+});
 
-Client:
-
-```javascript
-  var rpc = require('jrpc2');
-  var zmqTransport = require('zmq-transport');
-
-  var zmq = new zmqTransport({url: 'tcp://127.0.0.1:5555'});
-
-  var client = new rpc.client(zmq);
-
-  client.call('users.auth', ["admin","swd"], function (err, raw) {
-    console.log(err, raw);
-  });
 ```
