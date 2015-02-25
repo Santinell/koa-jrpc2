@@ -2,7 +2,7 @@
   "author": "Santinell",
   "name": "koa-jrpc2",
   "description": "Koa middleware for jrpc2",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "keywords": [
     "jrpc2",
     "koa",
@@ -10,15 +10,15 @@
   ],
   "readmeFilename": "README.md",
   "dependencies": {
-    "co-body": "~1.0"
+    "co-body": "^1.0"
   },
   "peerDependencies": {
-    "jrpc2": "~0.4"
+    "jrpc2": "^0.4"
   },
   "devDependencies": {
-    "koa": "~0.18",
-    "mocha": "~2.1",
-    "chai": "~2.0"
+    "koa": "^0.18",
+    "mocha": "^2.1",
+    "chai": "^2.0"
   },
   "scripts": {
     "test": "mocha --harmony"

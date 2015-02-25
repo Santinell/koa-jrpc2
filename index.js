@@ -17,4 +17,3 @@ module.exports = exports = function (server) {
     }
   };
 }
-
