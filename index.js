@@ -6,10 +6,9 @@ module.exports = exports = function (server) {
       var body = yield parser.json(this);
       var me = this;
       var req = this.req;
-      if (req.cookies)
-        req.headers.cookies = req.cookies;
-      req.headers.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress
-      server.handleRequest(body, req.headers, function (answer) {
+      req.client_ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || '127.0.0.1'      
+      req.client_ip = req.client_ip.replace('::ffff:', '')
+      server.handleCall(body, req, function (answer) {
           me.body = answer;
       });
     } else {
