@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Santinell/koa-jrpc2.svg?branch=master)](https://travis-ci.org/Santinell/koa-jrpc2)
+
 Koa-JRPC2
 =====
 
