@@ -11,7 +11,7 @@ describe("Server", function () {
     server.should.have.property("context");
   });
 
-  it("should correct load modules from directory", function () {
+  it("should correctly load modules from directory", function () {
     server.loadModules(__dirname + "/modules/", function () {
       server.methods.should.have.property("users.auth");
       server.methods.should.have.property("logs.userLogout");
@@ -19,7 +19,7 @@ describe("Server", function () {
     });
   });
 
-  it("should have success function expose", function () {
+  it("should have success function exposed", function () {
     server.expose("sum", function (a, b) {
       return a + b;
     });
@@ -35,13 +35,13 @@ describe("koaMiddleware", function () {
   it("should success listen server", function () {
     (function () {
       app.use(koaMiddleware(server));
-      app.listen(8080);
+      app.listen(8081);
     }).should.not.throw(Error);
   });
 
 
-  it("should correct works with httpClient", function (done) {
-    var httpTransport = new rpc.httpTransport({port: 8080});
+  it("should work with httpClient", function (done) {
+    var httpTransport = new rpc.httpTransport({port: 8081});
     httpClient = new rpc.Client(httpTransport);
     var callback = function (err, raw) {
       should.not.exist(err);
@@ -51,4 +51,26 @@ describe("koaMiddleware", function () {
     };
     httpClient.invoke("sum", [4, 12], callback);
   });
+
+  it("should work with async server methods", function (done) {
+
+    server.expose("sumAsync", function (a, b) {
+    	var promise = new Promise(function(resolve) {
+    		setTimeout(resolve.bind(null, a+b), 500);
+    	});
+    	
+    	return promise;
+    });
+
+    var httpTransport = new rpc.httpTransport({port: 8081});
+    httpClient = new rpc.Client(httpTransport);
+    var callback = function (err, raw) {
+      should.not.exist(err);
+      var obj = JSON.parse(raw);
+      obj.should.deep.equal({id: 1, jsonrpc: '2.0', result: 16});
+      done();
+    };
+    httpClient.invoke("sumAsync", [4, 12], callback);
+  });
+
 });
